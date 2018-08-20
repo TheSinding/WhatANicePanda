@@ -1,12 +1,25 @@
 <template>
   <q-page class="flex flex-center">
-    <!-- <div class="row">
-      <q-btn @click="$refs.teachingModal.show()">Teach me more!</q-btn>
-    </div> -->
     <div class="row">
-      <h2 class="text-white">{{ sentence }}</h2>
+      <div class="row col-12">
+        <div class="col-12 row justify-center">
+          <transition
+            appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+          >
+            <h3 v-if="showSentence" class="font-sentence text-center speech-bubble q-pa-lg">{{ sentence }}</h3>
+          </transition>
+        </div>
+        <div class="col-12 row justify-center">
+          <div class="panda" />
+        </div>
+      </div>
+      <div class="row col-12 justify-center q-pa-sm">
+        <p>I know {{ counters.sentences }} sentences </p>
+        <p>{{ counters.viewed }} People got cheered up! </p>
+      </div>
     </div>
-    <!-- <teach ref="teachingModal" /> -->
   </q-page>
 </template>
 
@@ -14,19 +27,25 @@
 </style>
 
 <script>
-import Teach from '../components/Teach'
 import { QIcon } from 'quasar';
-import { sentenceService, analyzeService, contentTypes } from '../client/feathers.js'
+import { sentenceService, counterService } from '../client/feathers.js'
 export default {
   name: 'PageIndex',
   components: {
-    Teach,
     QIcon
   },
   created () {
     this.getRandomSentence();
+    this.getCounters();
   },
   mounted () {
+    sentenceService.on('counterChanged', message => {
+      this.counters.sentences = message.data.currentCount;
+    })
+    sentenceService.on('viewed', message => {
+      this.counters.viewed = message.data.currentCount;
+    })
+
     const SPACE_CHAR_CODE = 32;
     let timeThreshold = 600; // ms
     let timePressed = Date.now();
@@ -39,21 +58,28 @@ export default {
   },
   data () {
     return {
-      sentence: ''
+      sentence: '',
+      showSentence: false,
+      counters: {
+        sentences: 0,
+        viewed: 0
+      }
     }
   },
   methods: {
-    async addSentence (data) {
-      const result = await analyzeService.create({
-        metadata: { name: data.name, createdAt: Date.now() },
-        document: { type: contentTypes.TEXT, content: data.sentence }
-      });
-
-      console.log(result);
-    },
     async getRandomSentence () {
-      const result = await sentenceService.find({ query: { random: true } });
-      this.sentence = result.data.sentence
+      this.showSentence = false;
+      try {
+        const result = await sentenceService.find({ query: { random: true } });
+        this.sentence = result.sentence;
+      } catch (error) {
+        console.log(error);
+      }
+      this.showSentence = true;
+    },
+    async getCounters () {
+      const data = await counterService.find();
+      this.counters = data.counters
     }
   }
 }
@@ -61,23 +87,56 @@ export default {
 <style lang="stylus" scoped>
 @import '~variables';
 
-.bottom {
-  bottom: 0px;
+bubbleColor = #ffffff;
+
+.panda {
+  position: relative;
+  background: url('../assets/panda/panda.svg');
+  background-size: 100%, 100%;
+  min-height: 10vh;
+  min-width: 10vh;
+  width: 35vh;
+  height: 35vh;
 }
 
-.header {
-  min-height: 150px;
-  width: 100%;
-  color: white;
-  padding: 8px;
+.panda:before {
+  content: '';
+  position: absolute;
+  bottom: 3%;
+  z-index: -1;
+  border-radius: 50%;
+  width: 75%;
+  left: ((100 - @width) / 2)%;
+  height: 12px;
+  background-color: #333333;
+  border-top-color: bubbleColor;
 }
 
-.container {
-  padding: 8px;
+.heart {
+  display: block;
+  background-size: 512px 512px;
+  background: url('../assets/panda/heart.svg');
 }
 
-.title {
-  font-size: 40px;
-  font-weight: bold;
+.speech-bubble {
+  position: relative;
+  background: bubbleColor;
+  border-radius: 4em / 8em;
+  max-width: 35vw;
+}
+
+.speech-bubble:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-top-color: bubbleColor;
+  border-bottom: 0;
+  border-left: 0;
+  margin-left: -10px;
+  margin-bottom: -20px;
 }
 </style>
