@@ -76,7 +76,7 @@ export default {
       this.customDialogModel = true;
     },
     // custom handler
-    openURL,
+    openURL
   }
 }
 </script>
