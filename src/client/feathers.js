@@ -10,6 +10,8 @@ const client = feathers();
 client.configure(socketio(socket));
 
 const sentenceService = client.service('sentences');
+const aggregationService = client.service('aggregations');
+const counterService = client.service('counters');
 const analyzeService = client.service('analyze');
 const contentTypes = {
   TEXT: 'PLAIN_TEXT'
@@ -17,4 +19,10 @@ const contentTypes = {
 
 export default client;
 
-export { sentenceService, analyzeService, contentTypes };
+export {
+  sentenceService,
+  counterService,
+  aggregationService,
+  analyzeService,
+  contentTypes
+};
