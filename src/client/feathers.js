@@ -1,7 +1,13 @@
 import io from 'socket.io-client';
 import feathers from '@feathersjs/feathers';
 import socketio from '@feathersjs/socketio-client';
-const socket = io('localhost:3030', {
+console.log(process.env);
+
+// if (process.env.WAN_API_URL === null || process.env.WAN_API_URL === undefined) {
+//   throw new Error('What a nice api url missing!');
+// }
+
+const socket = io('https://test-wahfclmdmu.now.sh', {
   transports: ['websocket'],
   forceNew: true
 });
