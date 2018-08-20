@@ -40,6 +40,7 @@ module.exports = {
     "import/no-extraneous-dependencies": 0,
     semi: [0, "always"],
     "space-before-function-paren": 0,
+    "no-trailing-spaces": 1,
 
     // allow debugger during development
     "no-debugger": process.env.NODE_ENV === "production" ? 2 : 0
