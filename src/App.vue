@@ -14,6 +14,6 @@ export default {
 @import '~variables';
 
 body {
-  background: linear-gradient(top, #56CCF2, #2F80ED);
+  background: linear-gradient(202deg, #a1c4fd, #c2e9fb);
 }
 </style>
