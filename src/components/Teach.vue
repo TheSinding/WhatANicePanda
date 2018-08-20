@@ -3,10 +3,10 @@
     <div class="header">
       <p class="title">Teach me more nice things to say</p>
     </div>
-    <div class="container">
+    <div class="q-pa-md">
     <div>
       <q-field
-        icon="heart"
+        icon="fas fa-heart"
         label="Your name"
         :error="nameHasError"
         error-label="I need a name! :)"
@@ -14,7 +14,7 @@
         <q-input v-model="name" />
       </q-field>
       <q-field
-        icon="pencil"
+        icon="fas fa-comment-dots"
         label="Your sentence"
         :error="sentenceHasError"
         :error-label="sentenceError"
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import { analyzeService, contentTypes } from '../client/feathers.js'
+
 export default {
   // name: 'ComponentName',
   data () {
@@ -57,10 +59,30 @@ export default {
         this.sentenceError = 'I need a sentence <3'
         return;
       }
-      this.$emit('teach', { name: this.name, sentence: this.sentence });
+      this.addSentence({ name: this.name, sentence: this.sentence });
+    },
+    async addSentence (data) {
+      try {
+        await analyzeService.create({
+          metadata: { name: data.name, createdAt: Date.now() },
+          document: { type: contentTypes.TEXT, content: data.sentence }
+        });
+        this.open = false;
+      } catch (error) {
+        console.log(error);
+        this.sentenceHasError = true;
+      }
     },
     show() {
+      console.log('this is awesome');
       this.open = true;
+    }
+  },
+  watch: {
+    open() {
+      if (open) {
+        window.removeEventListener('keypress');
+      }
     }
   }
 }
