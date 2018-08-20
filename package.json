@@ -1,8 +1,8 @@
 {
-  "name": "rnw",
+  "name": "whatanicepanda",
   "version": "1.0.0",
-  "description": "A nice whale",
-  "productName": "Randomly nice whale",
+  "description": "A nice panda",
+  "productName": "What a nice Panda!",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Simon Sinding <sinding2000@gmail.com>",
   "private": true,
@@ -15,7 +15,8 @@
     "@feathersjs/socketio-client": "^1.1.0",
     "axios": "^0.18.0",
     "socket.io-client": "^2.1.1",
-    "vue-i18n": "^7.3.3"
+    "vue-i18n": "^7.3.3",
+    "vue-social-sharing": "^2.3.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",
