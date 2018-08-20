@@ -8,16 +8,12 @@
           enter-active-class="animated fadeIn"
           leave-active-class="animated fadeOut"
           >
-            <h3 v-if="showSentence" class="font-sentence text-center speech-bubble q-pa-lg">{{ sentence }}</h3>
+            <h4 v-if="showSentence" class="font-sentence text-center speech-bubble q-pa-lg">{{ sentence }}</h4>
           </transition>
         </div>
         <div class="col-12 row justify-center">
           <div class="panda" />
         </div>
-      </div>
-      <div class="row col-12 justify-center q-pa-sm">
-        <p>I know {{ counters.sentences }} sentences </p>
-        <p>{{ counters.viewed }} People got cheered up! </p>
       </div>
     </div>
   </q-page>
@@ -27,12 +23,15 @@
 </style>
 
 <script>
-import { QIcon } from 'quasar';
+import { QIcon, QTooltip } from 'quasar';
+import SocialSharing from 'vue-social-sharing';
 import { sentenceService, counterService } from '../client/feathers.js'
 export default {
   name: 'PageIndex',
   components: {
-    QIcon
+    QIcon,
+    QTooltip,
+    SocialSharing
   },
   created () {
     this.getRandomSentence();
