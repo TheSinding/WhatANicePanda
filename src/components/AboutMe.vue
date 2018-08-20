@@ -73,7 +73,7 @@ export default {
   },
   methods: {
     show() {
-      this.customDialogModel = true;
+      this.customModalModel = true;
     },
     // custom handler
     openURL
